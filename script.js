@@ -1,28 +1,57 @@
+let knowledge = [];
+
+fetch("knowledge.json")
+.then(response => response.json())
+.then(data => {
+    knowledge = data;
+});
+
 function askAI(){
 
-let q = document.getElementById("question").value;
+    let question = document.getElementById("question").value.toLowerCase();
 
-if(q.trim() === ""){
-    document.getElementById("answer").innerHTML =
-    "Sila masukkan soalan.";
-    return;
-}
+    if(question.trim()==""){
+        document.getElementById("answer").innerHTML="Sila masukkan soalan.";
+        return;
+    }
 
-document.getElementById("answer").innerHTML =
-`
-<b>Soalan:</b> ${q}
+    let found = false;
 
-<br><br>
+    for(let item of knowledge){
 
-⚠️ Modul AI belum diaktifkan.
+        if(question.includes(item.keyword)){
 
-<br><br>
+            document.getElementById("answer").innerHTML=`
+            <h3>Jawapan</h3>
 
-Cadangan:
-<ul>
-<li>Semak PK 2.2</li>
-<li>Semak PK 2.3</li>
-<li>Rujuk Arahan Perbendaharaan</li>
-</ul>
-`;
+            <p>${item.answer}</p>
+
+            <hr>
+
+            <small>
+            Dijana oleh iKnow Procurement Knowledge Base
+            </small>
+            `;
+
+            found=true;
+            break;
+        }
+
+    }
+
+    if(!found){
+
+        document.getElementById("answer").innerHTML=`
+        <h3>Maklumat Tidak Dijumpai</h3>
+
+        <p>
+        Tiada maklumat ditemui dalam Knowledge Base.
+        </p>
+
+        <small>
+        (Versi AI akan ditambah pada fasa seterusnya)
+        </small>
+        `;
+    }
+
 }
